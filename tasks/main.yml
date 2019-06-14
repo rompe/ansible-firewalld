@@ -1,0 +1,23 @@
+---
+# tasks file for firewalld
+
+- name: Install firewalld
+  package:
+    name: firewalld
+
+- name: Enable firewalld service
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+# On Raspbian the bindings are already there if using ansible_python_interpreter=/usr/bin/python3
+- name: Install Python firewalld bindings on CentOS
+  package:
+    name: python-firewall
+  when: ansible_distribution == "CentOS"
+
+- name: Uninstall iptables-services
+  package:
+    name: "iptables-services"
+    state: absent
